@@ -1,0 +1,13 @@
+image: kernai/refinery-parent-images:{{build.tag}}-exec-env
+manifests:
+  -
+    image: kernai/refinery-parent-images:{{build.tag}}-exec-env-drone-amd64
+    platform:
+      architecture: amd64
+      os: linux
+  -
+    image: kernai/refinery-parent-images:{{build.tag}}-exec-env-drone-arm64
+    platform:
+      architecture: arm64
+      os: linux
+      variant: v8
