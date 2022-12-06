@@ -8,3 +8,7 @@ COPY submodules/parent-images/requirements/mini-requirements.txt .
 COPY submodules/parent-images/requirements/exec-env-requirements.txt .
 
 RUN pip install --no-cache-dir -r exec-env-requirements.txt
+
+# RUN python3 -m nltk.downloader all # all size of ~3.5 GB
+# partial download only ~100 MB
+RUN python3 -m nltk.downloader words stopwords wordnet omw-1.4 brown punkt
