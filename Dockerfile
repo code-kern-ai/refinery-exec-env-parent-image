@@ -38,6 +38,6 @@ ENV NLTK_DATA=/opt/nltk_data
 COPY --from=builder --chown=65532:65532 ${VENV_PATH} ${VENV_PATH}
 COPY --from=builder --chown=65532:65532 /opt/nltk_data /opt/nltk_data
 
-RUN python -c "import aiohttp._http_parser, blis, cymem.cymem, cytoolz, frozenlist._frozenlist, jellyfish, lxml.etree, multidict._multidict, numpy.core._multiarray_umath, pandas._libs, preshed.maps, pydantic_core._pydantic_core, scipy, sklearn, spacy, srsly.ujson.ujson, thinc, tiktoken._tiktoken, yarl._quoting_c"
+RUN ["/opt/venv/bin/python", "-c", "import aiohttp._http_parser, blis, cymem.cymem, cytoolz, frozenlist._frozenlist, jellyfish, lxml.etree, multidict._multidict, numpy.core._multiarray_umath, pandas._libs, preshed.maps, pydantic_core._pydantic_core, scipy, sklearn, spacy, srsly.ujson.ujson, thinc, tiktoken._tiktoken, yarl._quoting_c"]
 
 USER 65532:65532
