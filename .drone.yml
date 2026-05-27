@@ -53,7 +53,7 @@ steps:
       - 'git config --global url."https://github.com/".insteadOf git@github.com:'
       - "git submodule update --recursive"
   - name: build and publish
-    image: plugins/docker:21.2.8-linux-amd64
+    image: plugins/docker:21.2.8-linux-arm64
     depends_on:
       - submodules
     settings:
@@ -70,8 +70,8 @@ steps:
       repo: "registry.dev.kern.ai/code-kern-ai/refinery-parent-images"
       tags: ["${DRONE_COMMIT_SHA}-exec-env-arm64", "${DRONE_COMMIT_BRANCH}-exec-env-arm64"]
       cache_from:
-        - "registry.dev.kern.ai/code-kern-ai/refinery-parent-images:dev-exec-env"
-        - "registry.dev.kern.ai/code-kern-ai/refinery-parent-images:${DRONE_COMMIT_BRANCH}-exec-env"
+        - "registry.dev.kern.ai/code-kern-ai/refinery-parent-images:dev-exec-env-arm64"
+        - "registry.dev.kern.ai/code-kern-ai/refinery-parent-images:${DRONE_COMMIT_BRANCH}-exec-env-arm64"
 
 trigger:
   branch:
@@ -131,7 +131,7 @@ steps:
       - 'git config --global url."https://github.com/".insteadOf git@github.com:'
       - "git submodule update --recursive"
   - name: build and publish
-    image: plugins/docker:21.2.8-linux-amd64
+    image: plugins/docker:21.2.8-linux-arm64
     depends_on:
       - submodules
     settings:
