@@ -1,5 +1,5 @@
-ARG DHI_PYTHON_BUILD=dhi.io/python:3.11.11-debian12-dev
-ARG DHI_PYTHON_RUNTIME=dhi.io/python:3.11.11-debian12
+ARG DHI_PYTHON_BUILD=dhi.io/python:3.11-debian12-dev
+ARG DHI_PYTHON_RUNTIME=dhi.io/python:3.11-debian12
 
 FROM ${DHI_PYTHON_BUILD} AS builder
 
