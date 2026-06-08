@@ -1,4 +1,15 @@
-FROM python:3.11-slim
+ARG DHI_PYTHON_BUILD=dhi.io/python:3.11-debian12-dev
+ARG DHI_PYTHON_RUNTIME=dhi.io/python:3.11-debian12
+
+FROM ${DHI_PYTHON_BUILD} AS builder
+
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONUNBUFFERED=1
+ENV VENV_PATH=/opt/venv
+ENV PATH="${VENV_PATH}/bin:${PATH}"
+ENV NLTK_DATA=/opt/nltk_data
+
+RUN python -m venv "${VENV_PATH}"
 
 RUN apt-get update && \
     apt-get install --no-install-recommends -y build-essential curl && \
@@ -12,6 +23,21 @@ COPY submodules/parent-images/requirements/exec-env-requirements.txt .
 
 RUN pip install --no-cache-dir -r exec-env-requirements.txt
 
-# RUN python3 -m nltk.downloader all # all size of ~3.5 GB
-# partial download only ~100 MB
-RUN python3 -m nltk.downloader words stopwords wordnet omw-1.4 brown punkt
+RUN mkdir -p "${NLTK_DATA}" && \
+    NLTK_DATA="${NLTK_DATA}" python -m nltk.downloader -d "${NLTK_DATA}" \
+    words stopwords wordnet omw-1.4 brown punkt
+
+FROM ${DHI_PYTHON_RUNTIME}
+
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONUNBUFFERED=1
+ENV VENV_PATH=/opt/venv
+ENV PATH="${VENV_PATH}/bin:${PATH}"
+ENV NLTK_DATA=/opt/nltk_data
+
+COPY --from=builder --chown=65532:65532 ${VENV_PATH} ${VENV_PATH}
+COPY --from=builder --chown=65532:65532 /opt/nltk_data /opt/nltk_data
+
+RUN ["/opt/venv/bin/python", "-c", "import aiohttp._http_parser, blis, cymem.cymem, cytoolz, frozenlist._frozenlist, jellyfish, lxml.etree, multidict._multidict, numpy.core._multiarray_umath, pandas._libs, preshed.maps, pydantic_core._pydantic_core, scipy, sklearn, spacy, srsly.ujson.ujson, thinc, tiktoken._tiktoken, yarl._quoting_c"]
+
+USER 65532:65532

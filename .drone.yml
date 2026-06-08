@@ -13,13 +13,19 @@ steps:
       - 'git config --global url."https://github.com/".insteadOf git@github.com:'
       - "git submodule update --recursive"
   - name: build and publish
-    image: plugins/docker
+    image: plugins/docker:21
     settings:
+      platform: linux/amd64
       registry: registry.dev.kern.ai
       username:
         from_secret: docker_username
       password:
         from_secret: docker_password
+      base_image_registry: dhi.io
+      base_image_username:
+        from_secret: dockerhub_username
+      base_image_password:
+        from_secret: dockerhub_password
       repo: "registry.dev.kern.ai/code-kern-ai/refinery-parent-images"
       tags: ["${DRONE_COMMIT_SHA}-exec-env", "${DRONE_COMMIT_BRANCH}-exec-env"]
       cache_from:
@@ -46,13 +52,19 @@ steps:
       - 'git config --global url."https://github.com/".insteadOf git@github.com:'
       - "git submodule update --recursive"
   - name: build and publish
-    image: plugins/docker
+    image: plugins/docker:21
     settings:
+      platform: linux/arm64
       registry: registry.dev.kern.ai
       username:
         from_secret: docker_username
       password:
         from_secret: docker_password
+      base_image_registry: dhi.io
+      base_image_username:
+        from_secret: dockerhub_username
+      base_image_password:
+        from_secret: dockerhub_password
       repo: "registry.dev.kern.ai/code-kern-ai/refinery-parent-images"
       tags: ["${DRONE_COMMIT_SHA}-exec-env-arm64", "${DRONE_COMMIT_BRANCH}-exec-env-arm64"]
       cache_from:
@@ -81,11 +93,17 @@ steps:
       - 'git config --global url."https://github.com/".insteadOf git@github.com:'
       - "git submodule update --recursive"
   - name: build and publish
-    image: plugins/docker
+    image: plugins/docker:21
     settings:
+      platform: linux/amd64
       username:
         from_secret: dockerhub_username
       password:
+        from_secret: dockerhub_password
+      base_image_registry: dhi.io
+      base_image_username:
+        from_secret: dockerhub_username
+      base_image_password:
         from_secret: dockerhub_password
       repo: "kernai/refinery-parent-images"
       tag: "${DRONE_TAG}-exec-env-drone-amd64"
@@ -110,11 +128,17 @@ steps:
       - 'git config --global url."https://github.com/".insteadOf git@github.com:'
       - "git submodule update --recursive"
   - name: build and publish
-    image: plugins/docker
+    image: plugins/docker:21
     settings:
+      platform: linux/arm64
       username:
         from_secret: dockerhub_username
       password:
+        from_secret: dockerhub_password
+      base_image_registry: dhi.io
+      base_image_username:
+        from_secret: dockerhub_username
+      base_image_password:
         from_secret: dockerhub_password
       repo: "kernai/refinery-parent-images"
       tag: "${DRONE_TAG}-exec-env-drone-arm64"
@@ -127,14 +151,14 @@ trigger:
 kind: pipeline
 name: manifest
 steps:
-- name: manifest
-  image: plugins/manifest
-  settings:
-    spec: manifest.tmpl
-    username:
-      from_secret: dockerhub_username
-    password:
-      from_secret: dockerhub_password
+  - name: manifest
+    image: plugins/manifest
+    settings:
+      spec: manifest.tmpl
+      username:
+        from_secret: dockerhub_username
+      password:
+        from_secret: dockerhub_password
 
 depends_on:
   - amd64-dockerhub
