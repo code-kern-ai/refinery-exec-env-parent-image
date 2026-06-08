@@ -14,6 +14,8 @@ steps:
       - "git submodule update --recursive"
   - name: build and publish
     image: plugins/docker:21
+    environment:
+      BUILDX_NO_DEFAULT_ATTESTATIONS: "1"
     settings:
       platform: linux/amd64
       registry: registry.dev.kern.ai
@@ -53,6 +55,8 @@ steps:
       - "git submodule update --recursive"
   - name: build and publish
     image: plugins/docker:21
+    environment:
+      BUILDX_NO_DEFAULT_ATTESTATIONS: "1"
     settings:
       platform: linux/arm64
       registry: registry.dev.kern.ai
@@ -94,6 +98,8 @@ steps:
       - "git submodule update --recursive"
   - name: build and publish
     image: plugins/docker:21
+    environment:
+      BUILDX_NO_DEFAULT_ATTESTATIONS: "1"
     settings:
       platform: linux/amd64
       username:
@@ -129,6 +135,8 @@ steps:
       - "git submodule update --recursive"
   - name: build and publish
     image: plugins/docker:21
+    environment:
+      BUILDX_NO_DEFAULT_ATTESTATIONS: "1"
     settings:
       platform: linux/arm64
       username:
